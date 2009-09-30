@@ -1,0 +1,281 @@
+<!-- begin javascript.tt2 (distrib) -->
+[% IF use_htmlarea %]
+<script type="text/javascript">
+  _editor_url = "[% htmlarea_url %]/";
+  _editor_lang = "en";
+</script>
+
+<script type="text/javascript" src="[% htmlarea_url %]/htmlarea.js"></script>
+[% END %]
+
+<script type="text/javascript">
+function showhide(div){
+    oDiv = document.getElementById(div);
+    if(oDiv.style.display == "none"){
+        oDiv.style.display = "block";
+    }else{
+        oDiv.style.display = "none";
+    }
+}
+</script>
+
+<script type="text/javascript">
+function show(div){
+    oDiv = document.getElementById(div);
+    oDiv.style.display = "block";
+}
+</script>
+
+<script type="text/javascript">
+function hide(div){
+    oDiv = document.getElementById(div);
+    oDiv.style.display = "none";
+}
+</script>
+
+<script type="text/javascript">
+<!-- for other browsers
+
+// To confirm archives deletion
+ function dbl_confirm(my_form, my_message,my_message2) {
+     
+      if (confirm(my_message)) 
+      {
+    	 if (confirm(my_message2)) 
+	 {
+	     my_form.zip.value = "1";
+	 }
+	 }else{
+	return false;
+	}
+  }	
+
+  // To confirm a form submition
+  function request_confirm(my_message) {
+    if (confirm(my_message)) {
+      return true;
+    }else {
+      return false;
+    } 
+}
+
+  // To confirm on a link (A HREF)
+  function request_confirm_link(my_url, my_message) {
+    question = confirm(my_message);
+    if (question !="0") {
+         top.location = my_url;
+    }
+  }
+
+[% IF false %]
+  // To ask topic selection
+  var topic_names = new Array();
+  var topic_titles = new Array();	
+  function checkbox_selection(my_url, my_message, boxnames, boxtitles) {
+    var maxname = boxnames.length;	
+    var maxtitle = boxtitles.length;	
+
+    if (maxname != maxtitle) {
+	return false;
+    }	
+    
+    msg=window.open("","","width=300,height=300,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,copyhistory=no");
+    msg.document.write('<HTML><BODY>'+'<CENTER><h3>'+my_message+'</h3></CENTER>');
+    msg.document.write('<form action='+my_url+' method="post">');
+    msg.document.write('<input type="hidden" name="list" value="[% list %]"/>');
+    msg.document.write('<input type="hidden" name="action" value="review"/>');
+
+    for (var i=0;i<maxname ;i++ ){	
+	var bname = 'topic_'+boxnames[i];
+	msg.document.write('<input type="checkbox" name='+bname+' value="1">'+boxtitles[i]);
+	msg.document.write('<br />');	
+    }
+    msg.document.write('<input type="checkbox" name="other" value="1" />[%|loc%]Other[%END%]');	
+    msg.document.write('<br /><br /><br />');
+    msg.document.write('<input type="button" value="OK" onClick ="self.close()">');this.form.submit()	
+    msg.document.write('</form>');	
+    msg.document.write('</BODY></HTML>');
+	
+    return true;
+    //return msg.document.form;
+
+  }
+[% END %]
+
+
+
+
+
+  // To confirm on a link (A HREF)
+  function refresh_mom_and_die() {
+    url = window.opener.location.href;
+
+    if (url.indexOf('logout') > -1 ) {
+      url = '[% path_cgi %]/';
+    }
+
+    window.opener.location = url;
+    self.close();
+  }
+
+[% IF cookie_set %]
+  function GetCookie (name) {
+     var arg = name + "=";
+     var alen = arg.length;
+     var clen = document.cookie.length;
+     var i = 0;
+     while (i < clen) {
+       var j = i + alen;
+       if (document.cookie.substring(i, j) == arg) 
+         return getCookieVal (j);
+         i = document.cookie.indexOf(" ", i) + 1;
+         if (i == 0) break; 
+       }
+     return null;
+  }  
+
+  function getCookieVal (offset) {
+    var endstr = document.cookie.indexOf (";", offset);
+    if (endstr == -1)
+      endstr = document.cookie.length;
+    return unescape(document.cookie.substring(offset, endstr));
+  }
+
+  function check_cookie() {
+ 
+     if (GetCookie('sympa_session') == null) {
+        alert("[%|loc%]Sympa could not set a cookie for login.\n Your should configure your browser to accept cookies[%END%]");
+     }
+  }
+[% END %]
+
+  function toggle_selection(myfield) {
+    for (i = 0; i < myfield.length; i++) {
+       if (myfield[i].checked) {
+            myfield[i].checked = false;
+       }else {
+	    myfield[i].checked = true;
+       }
+    }
+  }
+
+[% IF (action == 'modindex' || action == 'request_topic') || (action == 'viewmod' || action == 'compose_mail')%] 
+  // To check at least one checkbox checked
+  function checkbox_check_topic(form,string) {
+ 
+    var checkbox_checked = false;
+    var expr = /^topic_/;	
+  
+    for (i = 0; i < form.elements.length; i++) {
+      if (form.elements[i].type == "checkbox") { 
+        var box = form.elements[i];
+        if (box.checked == "1" && expr.test(box.name)) {
+ 	 checkbox_checked = true;
+       	 break;	
+        }
+      }
+    }
+    if (checkbox_checked) {
+      return(true);	
+    } else {
+      alert("You must select a topic");
+      return(false);
+    }
+  }
+
+[% END %]
+
+[% IF false %] 
+ 
+  // No used function	
+  // If the motif is found in the string, my_question is asked
+  // if the answer == yes than action is d_unzip else d_upload 
+  function requestBasedOnRegExp(my_question,my_form) {
+    expr = /^.+\.zip$/i;
+
+    found = expr.exec(document.getElementById("uploaded_file").value);
+
+    if (found) {
+      if (confirm(my_question)) {
+        document.getElementById("javascript_action").value = "d_unzip";
+
+      } else {
+        document.getElementById("javascript_action").value = "d_upload";
+      }
+    }else {
+      document.getElementById("javascript_action").value = "d_upload";
+    }
+    return true;
+  }   
+[% END %]
+
+//launch a search by message Id
+function searched_by_msgId(id) {
+	var lgt_type_searched = document.log_form.type_searched.options.length;
+	var length = document.log_form.target_type.options.length;
+	document.log_form.target_type.options[length-2].selected = true;
+	document.log_form.elements["target_searched"].value=id;
+	document.log_form.type_searched.options[lgt_type_searched-1].selected = true;
+	document.log_form.submit();
+}
+
+//reset all field in log form.
+function clear_log_form() {
+	var lgt_target_type = document.log_form.target_type.options.length;
+	var lgt_type_searched = document.log_form.type_searched.options.length;
+	document.log_form.target_type.options[lgt_target_type-3].selected = true;
+	document.log_form.elements["target_searched"].value='';
+	document.log_form.elements["date_from"].value='';
+	document.log_form.elements["date_to"].value='';
+	document.log_form.type_searched.options[lgt_type_searched-10].selected = true;
+	var lgt_list_searched = document.log_form.list_searched.options.length;
+	document.log_form.list_searched.options[lgt_list_searched-11].selected = true;
+	document.log_form.elements["ip_searched"].value='';
+}
+
+//set a form field value to empty string. It uses the value of the field whose id is given
+// as argument as a control to perform this operation or not.
+function empty_field(target_field, control_field) {
+	if (document.getElementById(control_field).value == 'false'){
+		document.getElementById(control_field).value = 'true';
+		document.getElementById(target_field).value = '';
+	}
+}
+
+//to hide menu
+
+function afficheId(baliseId,baliseId2)
+  {
+  if (document.getElementById && document.getElementById(baliseId) != null)
+    {
+    document.getElementById(baliseId).style.visibility='visible';
+    document.getElementById(baliseId).style.display='block';
+    }
+  if (document.getElementById(baliseId2) != null)
+    {
+    document.getElementById(baliseId2).style.margin='0 0 0 25%';
+    }
+  }
+
+function cacheId(baliseId,baliseId2)
+  {
+  if (document.getElementById && document.getElementById(baliseId) != null)
+    {
+    document.getElementById(baliseId).style.visibility='hidden';
+    document.getElementById(baliseId).style.display='none';
+    }
+  if (document.getElementById(baliseId2) != null)
+    {
+    document.getElementById(baliseId2).style.margin='0 0 0 0';
+    }
+  
+  }
+
+cacheId('contenu','Stretcher');
+// if JavaScript is available, hide the content on the page load.
+// Without JavaScript, content will be display.
+
+// end browsers -->
+</script>
+
+<!-- end javascript.tt2 -->

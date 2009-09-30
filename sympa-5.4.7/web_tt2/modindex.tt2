@@ -1,0 +1,155 @@
+<!-- $Id: modindex.tt2 4752 2007-12-13 14:47:33Z david.verdin $ -->
+
+[% IF mod_total %]
+<!-- moderation of messages -->
+<form action="[% path_cgi %]" method="post" name="moderate_mails">
+<fieldset>
+  <input type="hidden" name="list" value="[% list %]" />
+<h2>[%|loc%]Listing messages to moderate[%END%]</h2>
+
+ [%- IF topic_required -%]
+  <input type="submit" name="action_distribute" value="[%|loc%]Distribute[%END%]"  onclick="return checkbox_check_topic(moderate_mails)"/>
+ [%- ELSE -%]
+  <input class="MainMenuLinks" type="submit" name="action_distribute" value="[%|loc%]Distribute[%END%]" />
+ [%- END -%]
+  <input class="MainMenuLinks" type="submit" name="action_reject.quiet" value="[%|loc%]Reject[%END%]" />
+  <input class="MainMenuLinks" type="submit" name="action_reject" value="[%|loc%]Notified reject[%END%]" />
+[% IF conf.use_blacklist != 'none' %]
+  <input class="MainMenuLinks" type="submit" name="action_reject.quiet.blacklist" value="[%|loc%]Reject and blacklist sender[%END%]" />
+  <input class="MainMenuLinks" type="submit" name="action_blacklist" value="[%|loc%]edit blacklist[%END%]" />
+[% END %]
+<br />
+ [%- IF request_topic -%]
+ <br />
+ [%|loc%]This list is configured to require topic(s).[%END%]
+ <br />
+ [%|loc%]Please select one or more topic(s) that corresponds to the messages you wish to distribute :[%END%] 
+ <br />
+ [% FOREACH t = available_topics %]
+ <input type="checkbox" name="topic_[%t.name%]" value="1"> [% t.title %] </input>
+ <br />
+ [%- END- %]
+ <br />
+ [%- END -%]
+
+ <table summary="[%|loc%]Listing messages to moderate[%END%]" class="listOfItems">
+      <tr>
+
+	<th>X</th>
+        <th>[%|loc%]Date[%END%]</th>
+	<th>[%|loc%]Author[%END%]</th>
+	<th>[%|loc%]Subject[%END%]</th>
+	<th>[%|loc%]Size[%END%]</th>
+      </tr>	 
+      [% FOREACH msg = spool %]
+        [% IF dark == '1' %]
+	  [% dark = '0' %]
+	  <tr>
+	[% ELSE %]
+	  [% dark = '1' %]
+          <tr class="color0">
+	[% END %]
+
+         <td>
+            <input type="checkbox" name="id" value="[% msg.key %]" />
+	 </td>
+	  <td>
+	    [% IF msg.value.date %]
+	      [% msg.value.date %]
+	    [% ELSE %]
+	      &nbsp;
+	    [% END %]
+	  </td>
+	  <td>[% msg.value.from %]</td>
+	  <td>
+	    [% IF msg.value.subject == 'no_subject' %]
+	      <a href="[% path_cgi %]/viewmod/[% list %]/[% msg.key %]">[%|loc%]No subject[%END%]</a>
+	    [% ELSE %]
+	      <a href="[% path_cgi %]/viewmod/[% list %]/[% msg.key %]">[% msg.value.subject %]</a>
+	    [% END %]
+	  </td>
+	  <td>[% msg.value.size %] kb</td>
+	</tr>
+      [% END %] 
+    </table>
+[% IF mod_message >= 10 %]
+ [%- IF topic_required -%]
+  <input type="submit" name="action_distribute" value="[%|loc%]Distribute[%END%]"  onclick="return checkbox_check_topic(moderate_mails)"/>
+ [%- ELSE -%]
+  <input class="MainMenuLinks" type="submit" name="action_distribute" value="[%|loc%]Distribute[%END%]" />
+ [% END %]
+  <input class="MainMenuLinks" type="submit" name="action_reject.quiet" value="[%|loc%]Reject[%END%]" />
+  <input class="MainMenuLinks" type="submit" name="action_reject" value="[%|loc%]Notified reject[%END%]" />
+[% IF conf.use_blacklist != 'none' %]
+  <input class="MainMenuLinks" type="submit" name="action_reject.blaclist" value="[%|loc%]Reject and blacklist sender[%END%]" />
+[% END %]
+<br />
+[% END %]
+
+   <input class="MainMenuLinks" type="button" value="[%|loc%]Toggle Selection[%END%]" onclick="toggle_selection(document.moderate_mails.id)" /><br />
+
+</fieldset>
+</form>
+[%END%]
+<br />
+<!-- moderation of document shared -->
+[% IF mod_total_shared %]
+<form action="[% path_cgi %]" method="post" name="moderate_shared">
+<fieldset>
+  <input type="hidden" name="list" value="[% list %]" />
+  <h2>[%|loc%]Listing of shared documents to moderate[%END%]</h2> 
+
+  <input class="MainMenuLinks" type="submit" name="action_d_install_shared" value="[%|loc%]Install[%END%]" />
+  <input class="MainMenuLinks" type="submit" name="action_d_reject_shared.quiet" value="[%|loc%]Reject[%END%]" />
+  <input class="MainMenuLinks" type="submit" name="action_d_reject_shared" value="[%|loc%]Notified reject[%END%]" />
+  <br />
+    <table summary="[%|loc%]Listing of documents shared to moderate[%END%]" class="listOfItems">
+      <tr>
+	<th>X</span></th>
+        <th>[%|loc%]Date[%END%]</th>
+	<th>[%|loc%]Author[%END%]</th>
+	<th>[%|loc%]Path[%END%]</th>
+	<th>[%|loc%]Size[%END%]	</th>
+      </tr>	 
+      [% FOREACH f = info_doc_mod %]
+        <tr>
+         <td>
+            <input type="checkbox" name="id" value="[% f.path %][% f.fname %]" />
+	 </td>
+	  <td>
+	    [% IF f.date %]
+	      [% f.date %]
+	    [% ELSE %]
+	      &nbsp;
+	    [% END %]
+	  </td>
+	  <td>[% f.author %]</td>
+	  <td>
+	    <a href="[% path_cgi %]/d_read/[% list %][% f.escaped_path %][% f.escaped_fname %]">[% f.visible_path %][% f.visible_fname %]</a>
+	  </td>
+	  <td>[% f.size %] kb</td>
+	</tr>
+      [% END %] 
+    </table>
+
+<br />
+  <input class="MainMenuLinks" type="button" value="[%|loc%]Toggle Selection[%END%]" onclick="toggle_selection(document.moderate_shared.id)" /><br />
+
+  <input class="MainMenuLinks" type="submit" name="action_d_install_shared" value="[%|loc%]Install[%END%]" />
+  <input class="MainMenuLinks" type="submit" name="action_d_reject_shared.quiet" value="[%|loc%]Reject[%END%]" />
+  <input class="MainMenuLinks" type="submit" name="action_d_reject_shared" value="[%|loc%]Notified reject[%END%]" />
+</fieldset>
+</form>
+
+[% END %]
+
+
+
+
+
+
+
+
+
+
+

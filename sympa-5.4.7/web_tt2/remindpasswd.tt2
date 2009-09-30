@@ -1,0 +1,18 @@
+<!-- $Id: remindpasswd.tt2 3907 2006-09-25 14:50:16Z serge.aumont $ -->
+
+<!-- begin remindpasswd.tt2 -->
+      <p>
+      [%|loc%]You have forgotten your password, or you've never had any password related to this server[%END%]<br />
+      [%|loc%]it will be sent to you by email :[%END%]
+      </p>
+      <form class="bold_label" action="[% path_cgi %]" method="post">
+	<fieldset>
+	<input type="hidden" name="referer" value="[% referer %]" />
+	<input type="hidden" name="action" value="sendpasswd" />
+           <label for="email">[%|loc%]Your e-mail address[%END%] : </label>
+           <input id="email" type="text" name="email" size="20" value="[% email %]" />
+          &nbsp;&nbsp;&nbsp;<input class="MainMenuLinks" type="submit" name="action_sendpasswd" value="[%|loc%]Send me my password[%END%]" />
+	</fieldset>
+      </form>
+
+<!-- end remindpasswd.tt2 -->

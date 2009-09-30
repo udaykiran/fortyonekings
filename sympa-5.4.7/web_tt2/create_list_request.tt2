@@ -1,0 +1,75 @@
+<!-- $Id: create_list_request.tt2 4752 2007-12-13 14:47:33Z david.verdin $ -->
+
+
+<form action="[% path_cgi %]" method="post">
+<fieldset>
+  <img src="[% icons_url %]/unknown.png" alt="[%|loc%]Help[%END%]" title="[%|loc%]the list name ; be careful, not its address ![%END%]" />
+  <label for="listname"><strong>[%|loc%]List name:[%END%]</strong></label>
+    <input type="text" id="listname" name="listname" size="30" value="[% saved.listname %]" />
+    <br />
+
+  <img src="[% icons_url %]/unknown.png" alt="[%|loc%]Help[%END%]" title="[%|loc%]You are the privileged owner of this list[%END%]" />
+  <strong>[%|loc%]Owner:[%END%]</strong>
+    <em>[% user.email %]</em><br />
+    
+  <img src="[% icons_url %]/unknown.png" alt="[%|loc%]Help[%END%]" title="[%|loc%]The list type is a set of parameters' profile. Parameters will be editable, once the list created[%END%]" />
+  <label for="list_type" ><strong>[%|loc%]List type :[%END%]</strong></label>
+    <ul id="list_type">
+  [% FOREACH template = list_list_tpl %]
+      <li>
+      <dl>
+      <dt>
+        <input type="radio" name="template" value="[% template.key %]"
+     [% IF template.value.selected %]
+       checked="checked"
+     [% END %]
+       /> [% template.key %]
+     </dt>
+     [% IF template.value.comment %]
+     <dd>
+     [% PROCESS $template.value.comment %]
+     </dd>
+     [% END %]
+     </dl>
+
+     </li>
+  [% END %]
+     </ul>
+     <br />
+
+  <img src="[% icons_url %]/unknown.png" alt="[%|loc%]Help[%END%]" title="[%|loc%]The list's subject[%END%]" /> 
+  <label for="subject"><strong>[%|loc%]Subject:[%END%]</strong></label>
+    <input type="text" name="subject" id="subject" size="60" value="[% saved.subject %]" />
+   <br />
+ 
+  <img src="[% icons_url %]/unknown.png" alt="[%|loc%]Help[%END%]" title="[%|loc%]List classification in the directory[%END%]" />
+  <label for="topics"><strong>[%|loc%]Topics:[%END%]</strong></label>
+    <select id="topics" name="topics">
+	<option value="">[%|loc%]--Select a topic--[%END%]</option>
+	[% FOREACH topic = list_of_topics %]
+	  <option value="[% topic.key %]"
+	  [% IF topic.value.selected %]
+	    selected="selected"
+	  [% END %]
+	  >[% topic.value.current_title %]</option>
+	  [% IF topic.value.sub %]
+	  [% FOREACH subtopic = topic.value.sub %]
+	     <option value="[% topic.key %]/[% subtopic.key %]">[% topic.value.current_title %] / [% subtopic.value.current_title %]</option>
+	  [% END %]
+	  [% END %]
+	[% END %]
+	<option value="other">[%|loc%]Other[%END%]</option>
+     </select>
+     <br />
+
+  <img class="align_top" src="[% icons_url %]/unknown.png" alt="[%|loc%]Help[%END%]" title="[%|loc%]A few lines describing the list[%END%]" />
+  <label for="info" class="align_top"><strong>[%|loc%]Description:[%END%]</strong></label>
+    <textarea class="desc" id="info" name="info" rows="10" cols="80">[% saved.info %]</textarea><br /><br />
+
+  <input class="MainMenuLinks" type="submit" name="action_create_list" value="[%|loc%]Submit your creation request[%END%]" />
+</fieldset>
+</form>
+
+
+
+

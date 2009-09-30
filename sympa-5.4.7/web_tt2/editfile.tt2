@@ -1,0 +1,30 @@
+<!-- $Id: editfile.tt2 4752 2007-12-13 14:47:33Z david.verdin $ -->
+
+<form action="[% path_cgi %]" method="post">
+<fieldset>
+[% IF file %]
+  <input type="hidden" name="list" value="[% list %]" />
+  <input type="hidden" name="file" value="[% file %]" />
+<textarea name="content" cols="80" rows="25">
+[% filecontent %]
+</textarea>
+<br />
+  <input class="MainMenuLinks" type="submit" name="action_savefile" value="[%|loc%]Save[%END%]" />
+
+[% ELSE %]
+[%|loc%]You can edit several messages/files associated with your list :[%END%]<br /><br />
+
+<dl>
+<dd><input type="hidden" name="list" value="[% list %]" />
+	     <select name="file">
+	      [% FOREACH f = files %]
+	        <option value="[% f.key %]" [% f.value.selected %]>[% f.value.complete %]</option>
+	      [% END %]
+	    </select>
+<input class="MainMenuLinks" type="submit" name="action_editfile" value="[%|loc%]Edit[%END%]" />
+</dd></dl>
+[% PROCESS 'help_editfile.tt2' %]
+
+[% END %]
+</fieldset>
+</form>	

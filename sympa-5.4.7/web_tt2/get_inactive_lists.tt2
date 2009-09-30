@@ -1,0 +1,29 @@
+<!-- RCS Identication ; $Revision: 4040 $ ; $Date: 2006-11-23 15:07:27 +0100 (jeu, 23 nov 2006) $ -->
+
+
+<table summary="[%|loc%]Inactive Lists[%END%]" class="table_style">
+<tr class="color4">
+   <th><strong>[%|loc%]Creation date[%END%]</strong></th>
+   <th><strong>[%|loc%]Most recent message[%END%]</strong></th>
+   <th><strong>[%|loc%]Listname[%END%]</strong></th>
+   <th><strong>[%|loc%]Subject[%END%]</strong></th>
+ </tr>
+
+[% FOREACH list = inactive_lists %]
+[% IF dark == '1' %]
+  <tr>[% SET dark = 0 %]
+[% ELSE %]
+  <tr class="color0">[% SET dark = 1 %]
+[% END %]
+
+<td>[% list.creation_date %]</td>
+<td>[% list.last_message_date %]</td>
+<td><a href="[% path_cgi %]/admin/[% list.name %]">[% list.name %]</a></td>
+<td>[% list.subject %]</td>
+</tr>
+[% END %]
+</table>
+
+
+
+

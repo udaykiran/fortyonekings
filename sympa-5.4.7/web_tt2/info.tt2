@@ -1,0 +1,18 @@
+<!-- $Id: info.tt2 3871 2006-08-30 08:58:16Z sympa-authors $ -->
+[% IF homepage_content %]
+     [% homepage_content %]
+[% ELSE %]
+   <pre>
+     [% info_content %]
+   </pre>
+[% END %]
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,97 @@
+<!-- RCS Identication ; $Revision: 5018 $ ; $Date: 2008-05-27 17:46:43 +0200 (mar, 27 mai 2008) $ -->
+
+<!-- begin login_menu.tt2 -->
+<div class="MenuBlock">
+[% IF user.email %]
+<div class="MenuBlock">
+<div id="Identity">[% user.email %]<br />
+[% IF restore_email %]
+  <form class="text_center" action="[% path_cgi %]" method="post">
+  <fieldset><input class="MainMenuLinks" type="submit" name="action_restore_email" value="[%|loc%]Restore identity[%END%]" />
+  </fieldset>
+  </form>	
+[%END%]
+[% IF is_listmaster %][%|loc%]Listmaster[%END%]
+[% ELSIF is_privileged_owner %][%|loc%]Privileged owner[%END%]
+[% ELSIF is_owner %][%|loc%]Owner[%END%]
+[% ELSIF is_editor %][%|loc%]Editor[%END%]
+[% ELSIF is_subscriber %][%|loc%]Subscriber[%END%]
+[% END %]
+</div>
+
+
+[% IF auth_method == 'md5' %]
+  <form class="text_center" action="[% path_cgi %]" method="post">
+  <fieldset>
+  <input type="hidden" name="action" value="logout" />
+  [% IF referer %]
+          <input type="hidden" name="referer" value="[% referer %]" />
+  [% ELSE %]
+          <input type="hidden" name="previous_action" value="[% home %]" />
+  [% END %]
+  <input class="MainMenuLinks" type="submit" name="action_logout" value="[%|loc%]Logout[%END%]" />
+  </fieldset>
+  </form>
+[% END %]
+</div>
+
+[% IF action == 'pref' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
+<strong><a class="[% class %]" href="[% path_cgi %]/pref" >[%|loc%]Your preferences[%END%]</a></strong><br />
+
+[% ELSE %]
+  <div class="MenuBlock">    
+        [% IF use_sso %]
+      <form action="[% path_cgi %]" method="post"> 
+	<fieldset>	
+        <input type="hidden" name="previous_action" value="[% previous_action %]" />
+        <input type="hidden" name="previous_list" value="[% previous_list %]" />
+	<input type="hidden" name="referer" value="[% referer %]" />
+        <input type="hidden" name="list" value="[% list %]" />
+	  <input type="hidden" name="action" value="sso_login" />
+          [% IF sso_number == 1 %]
+            [% FOREACH server = sso %]
+              <input type="hidden" name="auth_service_name" value="[% server.key %]" />
+              <input class="MainMenuLinks" type="submit" name="action_sso_login" value="[% server.value %]" /><br />
+           [% END %]
+          [% ELSE %]
+     	    <div class="menuInactive2"><strong><label for="auth_service_name">[%|loc%]Choose your authentication server[%END%]</label></strong></div>
+            <select id="auth_service_name" name="auth_service_name" onchange="this.form.submit();">
+            [% FOREACH server = sso %]
+               <option value="[% server.key %]">[% server.value %]</option>
+            [% END %]
+            </select>
+          <input class="MainMenuLinks" type="submit" name="action_sso_login" value="[%|loc%]Go[%END%]" /><br />
+          [% END %] 
+ 	</fieldset>
+      </form>
+     [% END %] 
+     [% IF use_passwd == '1' %]
+      <form action="[% path_cgi %]" method="post"> 
+	<fieldset>
+        <input type="hidden" name="previous_action" value="[% previous_action %]" />
+        <input type="hidden" name="previous_list" value="[% previous_list %]" />
+	<input type="hidden" name="referer" value="[% referer %]" />
+        <input type="hidden" name="list" value="[% list %]" />
+
+      <input type="hidden" name="action" value="login" />
+      <label for="email_login">[%|loc%]email address[%END%] :</label><br />
+      <input type="text" name="email" id="email_login" size="18" value="[% init_email %]" /><br />
+      <label for="passwd" >[%|loc%]password[%END%] :</label><br />
+      <input type="password" name="passwd" id="passwd" size="8" /> &nbsp;&nbsp;
+      <input class="MainMenuLinks" type="submit" name="action_login" value="[%|loc%]Login[%END%]" />
+	</fieldset>
+      </form>
+     [% END %]
+  </div>
+  <br />
+[% IF use_passwd == '1' %]
+  <a class="menuLinks" href="[% path_cgi %]/sendpasswd/[% escaped_init_email %]">[%|loc%]First login ?[%END%]</a><br />
+  <a class="menuLinks" href="[% path_cgi %]/remindpasswd">[%|loc%]Lost password ?[%END%]</a>
+[% END %]
+[% END %]
+
+</div><!-- end div=MenuBlock -->
+
+
+<!-- end login_menu.tt2 -->
+

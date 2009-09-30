@@ -1,0 +1,58 @@
+<!-- $Id: home.tt2 4752 2007-12-13 14:47:33Z david.verdin $ -->
+
+<p class="text_justify">
+[%|loc(conf.email,conf.host)%]This server provides you access to your environment on mailing list server %1@%2. Starting from this web page, you can perform subscription options, unsubscription,
+archives, list management and so on.[%END%]
+</p>
+ <form action="[% path_cgi %]" method="post"> 
+ <fieldset>
+    <input type="text" size="25" name="filter" value="[% filter %]" alt="[%|loc%]Enter a list name[%END%]"/>
+    <input type="hidden" name="action" value="search_list" />
+    <input class="MainMenuLinks" type="submit" name="action_search_list" value="[%|loc%]Search lists[%END%]" />
+    <br />
+ </fieldset>
+</form>
+<br />
+
+   <h1 class="block">[%|loc%]Mailing lists categories[%END%]</h1>
+<br />
+
+<div id="home_container">
+
+ <div id="global_mailing_lists">
+ 
+      <ul class="mailing_lists_menu">
+    [% FOREACH topic = topics %]
+      [% IF topic.id == 'topicsless' %]
+       <li><a href="[% path_cgi %]/lists/[% topic.id %]"><strong>[%|loc%]Others[%END%]</strong></a></li>
+      [% ELSE %]
+       <li><a href="[% path_cgi %]/lists/[% topic.id %]"><strong>[% topic.current_title %]</strong></a></li>
+      [% END %]
+
+      [% IF topic.sub.size %]
+            <li class="no_style"><ul class="no_style">
+      [% FOREACH subtopic = topic.sub %]
+              <li class="smaller"><a href="[% path_cgi %]/lists/[% topic.id %]/[% subtopic.key %]">[% subtopic.value.current_title %]</a></li>
+      [% END %]
+      </ul></li>
+      [% END %]
+      [% IF topic.next %]
+       </ul>
+   
+   
+      <ul class="mailing_lists_menu">
+      [% END %]
+    [% END %]
+      </ul>
+
+  </div>
+<div id="home_search_list">
+ <form action="[% path_cgi %]" method="post"> 
+ <fieldset id="home_rss_news">
+    <input class="MainMenuLinks" type="submit" name="action_rss_request" value="[%|loc%]RSS news[%END%]" />
+ </fieldset> 
+ </form>
+</div>
+
+</div>
+<br />
